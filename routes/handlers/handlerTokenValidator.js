@@ -9,7 +9,7 @@ module.exports = function(request, response, next){
     if(token){
         jwt.verify(token, secret, function(err, validToken){
             if(err){
-                return response.send({message: "invalid token"})
+                return response.status(401).send({message: "invalid token"})
             }
             else {
                 request.validToken = validToken;

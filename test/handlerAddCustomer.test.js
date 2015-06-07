@@ -40,7 +40,6 @@ describe('Trainer adds customer', function(){
         })
     });
     it('Should add customer when form is valid', function(done){
-
         var newCustomer = {
             "firstname" : "Mathias",
             "lastname"  : "Iden",
@@ -50,7 +49,22 @@ describe('Trainer adds customer', function(){
             .send(newCustomer)
             .set('x-access-token', token)
             .end(function(err, res){
+                expect(res.body.customer_id).to.be.a("number");
                 expect(res.body.message).to.be.eql("customer added");
+                done();
+            });
+    });
+
+    it('Should should give error if form is invalid', function(done){
+        var newCustomer = {
+            "firstname" : "Mathias",
+            "email"     : "mathias@xlib.no"
+        };
+        http.post(apiUrl + '/customer/new')
+            .send(newCustomer)
+            .set('x-access-token', token)
+            .end(function(err, res){
+                expect(res.body.message).to.be.eql('"lastname" is required');
                 done();
             });
     })

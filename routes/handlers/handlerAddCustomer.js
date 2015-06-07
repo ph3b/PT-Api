@@ -31,7 +31,8 @@ module.exports = function(request, response){
                         }
                         else {
                             db.transaction(function(trans){
-                                db.insert({
+                                db.transacting(trans)
+                                    .insert({
                                     firstname: request.body.firstname,
                                     lastname: request.body.lastname,
                                     email: request.body.email,
@@ -46,18 +47,20 @@ module.exports = function(request, response){
                                             response.send({message: "something went wrong"})
                                         }
                                         else {
-                                            db.insert({
+                                            db.transacting(trans)
+                                                .insert({
                                                 trainer_id : trainer_id,
                                                 customer_id : newCustomerId[0]
-                                            }).into("TrainerHasCustomer")
+                                                })
+                                                .into("TrainerHasCustomer")
                                                 .then(function(resultId, err){
                                                     if(err){
                                                         trans.rollback();
                                                         response.send({message: "something went wrong"})
                                                     }
-                                                    else {
+                                                    else{
                                                         trans.commit();
-                                                        response.send({message:"customer added"});
+                                                        response.send({message:"customer added", customer_id: newCustomerId[0]});
                                                     }
                                                 })
                                         }

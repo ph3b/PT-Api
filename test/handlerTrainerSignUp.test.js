@@ -4,7 +4,6 @@
 /**
  * Created by mattiden on 06.06.15.
  */
-
 var port = 5000;
 require("../app")(port);
 var expect = require("expect.js");
@@ -14,6 +13,7 @@ var db = require('./../config/db');
 var apiUrl = "http://localhost:" + port +"/api";
 
 describe("Trainer signs up", function(){
+
     before(function(done){
         db.insert({
             firstname: "mathias",
@@ -29,33 +29,24 @@ describe("Trainer signs up", function(){
             done();
         });
     });
+
     it('Should return error when submitting form without email',function(done){
         var payload = {
-            "firstname" : "mathias",
-            "lastname" : "iden",
             "password"   : "hawaii"
         };
 
         http.post(apiUrl + '/trainer/new')
             .send(payload)
             .end(function(err, res){
-                expect(res.body.message).to.be.eql('"email" is required');
+                expect(res.body.message).to.be.eql('invalid payload');
                 done();
             })
     });
 
-    it('Should return error when submitting form with invalid email',function(done){
-        var payload = {
-            "firstname" : "mathias",
-            "lastname" : "iden",
-            "password"   : "hawaii",
-            "email" : "mathiasbkk"
-        };
-
+    it('Should return error when submitting no payload',function(done){
         http.post(apiUrl + '/trainer/new')
-            .send(payload)
             .end(function(err, res){
-                expect(res.body.message).to.be.eql('"email" must be a valid email');
+                expect(res.body.message).to.be.eql("invalid payload");
                 done();
             })
     });

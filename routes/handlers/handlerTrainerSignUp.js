@@ -13,38 +13,33 @@ var signUpSchema = Joi.object().keys({
 });
 
 module.exports = function(request, response){
-    if(request.body){
-        Joi.validate(request.body,signUpSchema, function(submittedDataIsInvalid){
-            if(submittedDataIsInvalid){
-                response.send({message: submittedDataIsInvalid.details[0].message});
-            }
-            else {
-                db.select().from("Trainer")
-                    .where({email: request.body.email})
-                    .then(function(arrayWithExistingUser){
-                        if(arrayWithExistingUser.length){
-                            response.send({message: "User already exists."})
-                        }
-                        else {
-                            var password = bcrypt.hashSync(request.body.password, 10);
-                            db.insert({
-                                firstname: request.body.firstname,
-                                lastname: request.body.lastname,
-                                password: password,
-                                email: request.body.email
-                            }).into("Trainer")
-                                .then(function(result, userWasNotAddedToDatabase){
-                                    if(userWasNotAddedToDatabase){
-                                        response.send({message: "Could not add user to database"});
-                                    }
-                                    else {
-                                        response.send({message: "Added."});
-                                    }
-                                });
-                        }
-                    })
-            }
-        })
+    if(request.body.email && request.body.password){
+            db.select()
+                .from("Trainer")
+                .where({email: request.body.email})
+                .then(function(arrayWithExistingUser){
+                    if(arrayWithExistingUser.length){
+                        response.send({message: "User already exists."});
+                    }
+                    else {
+                        var password = bcrypt.hashSync(request.body.password, 10);
+                        db.insert({
+                            firstname: request.body.firstname,
+                            lastname: request.body.lastname,
+                            password: password,
+                            email: request.body.email
+                            })
+                            .into("Trainer")
+                            .then(function(result, userWasNotAddedToDatabase){
+                                if(userWasNotAddedToDatabase){
+                                    response.send({message: "Could not add user to database"});
+                                }
+                                else {
+                                    response.send({message: "Added."});
+                                }
+                            });
+                    }
+                })
     }
     else {
         response.send({message: "invalid payload"});

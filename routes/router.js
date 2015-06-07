@@ -10,6 +10,9 @@ var TokenValidatorHandler = require('./handlers/handlerTokenValidator');
 router.get('/hello', function(req, res){
     res.send({message:"Hello world"});
 });
+router.get('/restricted', TokenValidatorHandler, function(req, res){
+    res.send({message:"you are authorized"});
+})
 
 router.post('/trainer/new', TrainerSignUpHandler);
 router.post('/trainer/login', TrainerLoginHandler);
