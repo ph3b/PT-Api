@@ -20,26 +20,30 @@ module.exports = function(request, response){
                 .then(function(arrayWithExistingUser){
                     if(arrayWithExistingUser.length){
                         response.send({message: "User already exists."});
+                        throw 0
                     }
                     else {
                         var password = bcrypt.hashSync(request.body.password, 10);
-                        db.insert({
+                        return db.insert({
                             firstname: request.body.firstname,
                             lastname: request.body.lastname,
                             password: password,
                             email: request.body.email
                             })
                             .into("Trainer")
-                            .then(function(result, userWasNotAddedToDatabase){
-                                if(userWasNotAddedToDatabase){
-                                    response.send({message: "Could not add user to database"});
-                                }
-                                else {
-                                    response.send({message: "Added."});
-                                }
-                            });
                     }
                 })
+                .then(function(result, userWasNotAddedToDatabase){
+                    /* istanbul ignore if */
+                    if(userWasNotAddedToDatabase){
+                        response.send({message: "Could not add user to database"});
+                    }
+                    else {
+                       response.send({message: "Added.", trainer_id: result[0]});
+                    }
+                })
+                .catch(function(e){
+                });
     }
     else {
         response.send({message: "invalid payload"});

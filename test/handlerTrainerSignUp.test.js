@@ -79,6 +79,7 @@ describe("Trainer signs up", function(){
             .send(payload)
             .end(function(err, res){
                 expect(res.body.message).to.be.eql("Added.");
+                expect(res.body.trainer_id).to.be.a("number");
                 done();
             })
     });

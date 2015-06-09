@@ -43,7 +43,7 @@ create table WorkoutProgram(
 );
 
 create table Appointment(
-	appointment_id int NOT NULL,
+	appointment_id int NOT NULL AUTO_INCREMENT,
 	date datetime NOT NULL,
 	description varchar(300) NOT NULL,
 	workoutProgram_id int,

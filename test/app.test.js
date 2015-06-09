@@ -9,6 +9,7 @@ var http = require("superagent");
 var apiUrl = "http://localhost:" + port + "/api/";
 
 describe("App running", function(){
+
     it('Should respond to get request',function(done){
         http
             .get(apiUrl + 'hello')
@@ -16,5 +17,5 @@ describe("App running", function(){
                 expect(res.body.message).to.be.equal("Hello world");
                 done();
             })
-    })
+    });
 });

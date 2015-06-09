@@ -13,7 +13,6 @@ var loginSchema = Joi.object().keys({
 });
 
 module.exports = function(request, response){
-    if(request.body){
         Joi.validate(request.body,loginSchema, function(submittedDataIsInvalid){
             if(submittedDataIsInvalid){
                 response.status(401);
@@ -36,5 +35,4 @@ module.exports = function(request, response){
                     })
             }
         })
-    }
 };

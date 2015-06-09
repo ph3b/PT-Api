@@ -1,18 +1,24 @@
 /**
- * Created by mattiden on 06.06.15.
+ * Created by mattiden on 09.06.15.
+ */
+var TrainerHasThisCustomer = require('./../routes/handlers/helperTrainerHasThisCustomer');
+
+/**
+ * Created by mattiden on 07.06.15.
  */
 var port = 5000;
-require("../app")(port);
-var expect  = require("expect.js");
-var http    = require("superagent");
-var db      = require('./../config/db');
+require('../app.js')(port);
+var expect = require('expect.js');
+var db = require('../config/db');
+var http = require('superagent');
 var secret  = require('../config/config').secret;
 var jwt     = require('jsonwebtoken');
 
 var apiUrl = "http://localhost:" + port +"/api";
 
-describe('Trainer adds customer', function(){
+describe('Check if Trainer has this customer', function(){
     var token;
+    var trainer_id;
     before(function(done){
         var payload = {
             "firstname" : "mathias",
@@ -20,14 +26,14 @@ describe('Trainer adds customer', function(){
             "password"   : "hawaii",
             "email" : "mathiaserkul@me.com"
         };
-
         http.post(apiUrl + '/trainer/new')
             .send(payload)
-            .end(function(err, res){
+            .end(function(err, response){
                 http.post(apiUrl + '/trainer/login')
                     .send({email: payload.email, password: payload.password})
                     .end(function(err, res){
                         token = res.body.token;
+                        trainer_id = response.body.trainer_id;
                         done();
                     });
             })
@@ -39,7 +45,14 @@ describe('Trainer adds customer', function(){
             })
         })
     });
-    it('Should add customer when form is valid', function(done){
+    it('Should say the Trainer does not have this customer',function(done){
+        TrainerHasThisCustomer(trainer_id, 55, function(hasThisCustomer){
+            expect(hasThisCustomer).to.be.eql(false);
+            done();
+        });
+    });
+
+    it('Should say the Trainer has this customer',function(done){
         var newCustomer = {
             "firstname" : "Mathias",
             "lastname"  : "Iden",
@@ -49,23 +62,12 @@ describe('Trainer adds customer', function(){
             .send(newCustomer)
             .set('x-access-token', token)
             .end(function(err, res){
-                expect(res.body.customer_id).to.be.a("number");
-                expect(res.body.message).to.be.eql("customer added");
-                done();
+                TrainerHasThisCustomer(trainer_id, res.body.customer_id, function(hasThisCustomer){
+                    expect(hasThisCustomer).to.be.eql(true);
+                    done();
+                });
             });
     });
 
-    it('Should should give error if form is invalid', function(done){
-        var newCustomer = {
-            "firstname" : "Mathias",
-            "email"     : "mathias@xlib.no"
-        };
-        http.post(apiUrl + '/customer/new')
-            .send(newCustomer)
-            .set('x-access-token', token)
-            .end(function(err, res){
-                expect(res.body.message).to.be.eql('"lastname" is required');
-                done();
-            });
-    })
+
 });

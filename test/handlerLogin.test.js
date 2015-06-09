@@ -55,6 +55,26 @@ describe('Trainer logs in', function(){
                     done();
                 });
             });
-    })
+    });
 
+    it('Should give error when missing fields are send', function(done){
+        var invalidCredentials = {email: "valid@email.com"};
+        http.post(apiUrl + '/trainer/login')
+            .send(invalidCredentials)
+            .end(function(err, res){
+                expect(res.status).to.be.eql(401);
+                expect(res.body.message).to.be.eql("Invalid username or password");
+                done();
+            });
+    });
+
+    it('Should give error no payload is sent', function(done){
+        var invalidCredentials = {email: "valid@email.com"};
+        http.post(apiUrl + '/trainer/login')
+            .end(function(err, res){
+                expect(res.status).to.be.eql(401);
+                expect(res.body.message).to.be.eql("Invalid username or password");
+                done();
+            });
+    });
 });
