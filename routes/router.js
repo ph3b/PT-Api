@@ -3,7 +3,7 @@
  */
 var router = require('express').Router();
 var TrainerSignUpHandler    = require("./handlers/handlerTrainerSignUp");
-var TrainerLoginHandler     = require('./handlers/handlerLogin');
+var loginHandler     = require('./handlers/handlerLogin');
 var NewCustomerHandler      = require('./handlers/handlerNewCustomer');
 var TokenValidatorHandler   = require('./handlers/handlerTokenValidator');
 var NewAppointmentHandler   = require('./handlers/handlerNewAppointment');
@@ -15,11 +15,10 @@ router.get('/hello', function(req, res){
 router.get('/restricted', TokenValidatorHandler, function(req, res){
     res.send({message:"you are authorized"});
 });
-
-router.post('/trainer/new', TrainerSignUpHandler);
-router.post('/trainer/login', TrainerLoginHandler);
-router.post('/customer/new', TokenValidatorHandler, NewCustomerHandler);
-router.post('/appointment/new', TokenValidatorHandler, NewAppointmentHandler);
+router.post('/trainer', TrainerSignUpHandler);
+router.post('/trainer/login', loginHandler);
+router.post('/customer', TokenValidatorHandler, NewCustomerHandler);
 router.get('/customer/:customer_id', TokenValidatorHandler, GetCustomerByIdHandler);
+router.post('/appointment', TokenValidatorHandler, NewAppointmentHandler);
 
 module.exports = router;

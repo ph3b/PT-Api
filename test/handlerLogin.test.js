@@ -20,7 +20,7 @@ describe('Trainer logs in', function(){
             "email" : "valid@email.com"
         };
 
-        http.post(apiUrl + '/trainer/new')
+        http.post(apiUrl + '/trainer')
             .send(payload)
             .end(function(err, res){
                 done();
@@ -50,7 +50,7 @@ describe('Trainer logs in', function(){
             .end(function(err, res){
                 jwt.verify(res.body.token,secret, function(err, decoded){
                     expect(res.status).to.be.eql(200);
-                    expect(res.body.message).to.be.eql("logged in");
+                    expect(res.body.message).to.be.eql("Logged in");
                     expect(err).to.be(null);
                     done();
                 });

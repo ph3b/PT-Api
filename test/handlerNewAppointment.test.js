@@ -26,14 +26,14 @@ describe('Trainer adds appointment', function(){
             "email"     : "mathias@xlib.no"
         };
 
-        http.post(apiUrl + '/trainer/new')
+        http.post(apiUrl + '/trainer')
             .send(trainer)
             .end(function(err, res){
                 http.post(apiUrl + '/trainer/login')
                     .send({email: trainer.email, password: trainer.password})
                     .end(function(err, res){
                         token = res.body.token;
-                        http.post(apiUrl + '/customer/new')
+                        http.post(apiUrl + '/customer')
                             .send(customer)
                             .set('x-access-token', token)
                             .end(function(err, res){
@@ -59,7 +59,7 @@ describe('Trainer adds appointment', function(){
             description : "Løpetrening"
         };
 
-        http.post(apiUrl + '/appointment/new')
+        http.post(apiUrl + '/appointment')
             .send(appointment)
             .set('x-access-token', token)
             .end(function(err, res){
@@ -75,7 +75,7 @@ describe('Trainer adds appointment', function(){
             customer_id : customer_id
         };
 
-        http.post(apiUrl + '/appointment/new')
+        http.post(apiUrl + '/appointment')
             .send(appointment)
             .set('x-access-token', token)
             .end(function(err, res){

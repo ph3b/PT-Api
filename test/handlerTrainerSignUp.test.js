@@ -35,7 +35,7 @@ describe("Trainer signs up", function(){
             "password"   : "hawaii"
         };
 
-        http.post(apiUrl + '/trainer/new')
+        http.post(apiUrl + '/trainer')
             .send(payload)
             .end(function(err, res){
                 expect(res.body.message).to.be.eql('invalid payload');
@@ -44,7 +44,7 @@ describe("Trainer signs up", function(){
     });
 
     it('Should return error when submitting no payload',function(done){
-        http.post(apiUrl + '/trainer/new')
+        http.post(apiUrl + '/trainer')
             .end(function(err, res){
                 expect(res.body.message).to.be.eql("invalid payload");
                 done();
@@ -59,7 +59,7 @@ describe("Trainer signs up", function(){
             "email" : "onlymathias@mac.com"
         };
 
-        http.post(apiUrl + '/trainer/new')
+        http.post(apiUrl + '/trainer')
             .send(payload)
             .end(function(err, res){
                 expect(res.body.message).to.be.eql("User already exists.");
@@ -75,7 +75,7 @@ describe("Trainer signs up", function(){
             "email" : "mathiaserkul@me.com"
         };
 
-        http.post(apiUrl + '/trainer/new')
+        http.post(apiUrl + '/trainer')
             .send(payload)
             .end(function(err, res){
                 expect(res.body.message).to.be.eql("Added.");

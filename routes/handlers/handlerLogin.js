@@ -26,7 +26,7 @@ module.exports = function(request, response){
                         if(user.length && bcrypt.compareSync(request.body.password, user[0].password)){
                             var token = jwt.sign({trainer_id: user[0].trainer_id, email: user[0].email}, secret,{expiresInMinutes:1440});
                             response.status(200);
-                            response.send({message: "logged in", token: token});
+                            response.send({message: "Logged in", token: token});
                         }
                         else {
                             response.status(401);

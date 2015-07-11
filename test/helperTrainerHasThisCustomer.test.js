@@ -16,7 +16,7 @@ var jwt     = require('jsonwebtoken');
 
 var apiUrl = "http://localhost:" + port +"/api";
 
-describe('Check if Trainer has this customer', function(){
+describe('Module: Check if Trainer has this customer', function(){
     var token;
     var trainer_id;
     before(function(done){
@@ -26,7 +26,7 @@ describe('Check if Trainer has this customer', function(){
             "password"   : "hawaii",
             "email" : "mathiaserkul@me.com"
         };
-        http.post(apiUrl + '/trainer/new')
+        http.post(apiUrl + '/trainer')
             .send(payload)
             .end(function(err, response){
                 http.post(apiUrl + '/trainer/login')
@@ -58,7 +58,7 @@ describe('Check if Trainer has this customer', function(){
             "lastname"  : "Iden",
             "email"     : "mathias@xlib.no"
         };
-        http.post(apiUrl + '/customer/new')
+        http.post(apiUrl + '/customer')
             .send(newCustomer)
             .set('x-access-token', token)
             .end(function(err, res){

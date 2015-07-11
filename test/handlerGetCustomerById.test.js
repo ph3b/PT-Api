@@ -11,8 +11,6 @@ var jwt = require('jsonwebtoken');
 
 var apiUrl = "http://localhost:" + port +"/api";
 
-
-
 describe('Trainer gets customer by id', function(){
     var customer_id;
     var token;
@@ -34,7 +32,7 @@ describe('Trainer gets customer by id', function(){
             "city" : "Bergen"
         };
 
-        http.post(apiUrl + '/trainer/new')
+        http.post(apiUrl + '/trainer')
             .send(trainer)
             .end(function(err, res){
                 trainer_id = res.body.trainer_id;
@@ -42,7 +40,7 @@ describe('Trainer gets customer by id', function(){
                     .send({email: trainer.email, password: trainer.password})
                     .end(function(err, res){
                         token = res.body.token;
-                        http.post(apiUrl + '/customer/new')
+                        http.post(apiUrl + '/customer')
                             .send(customer)
                             .set('x-access-token', token)
                             .end(function(err, res){

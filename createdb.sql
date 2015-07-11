@@ -33,7 +33,7 @@ create table WorkoutProgram(
 	start_date datetime NOT NULL,
 	end_date datetime,
 	description	varchar(1000),
-	tittel varchar(100),
+	title varchar(100),
 	customer_id int NOT NULL,
 	trainer_id int,
 	Primary key(workoutProgram_id),
@@ -54,4 +54,20 @@ create table Appointment(
 	Foreign key(workoutProgram_id) references WorkoutProgram(workoutProgram_id) on delete set null,
 	Foreign key(trainer_id) references Trainer(trainer_id) on delete cascade,
 	Foreign key(customer_id) references Customer(customer_id) on delete cascade
+);
+create table Excercise(
+    excercise_id int NOT NULL AUTO_INCREMENT,
+    name varchar(100) NOT NULL,
+    description varchar(300)
+);
+
+create table WorkoutProgramHasExcercise(
+    workoutProgram_id int NOT NULL,
+    excercise_id int NOT NULL,
+    set_number int NOT NULL,
+    weight int,
+    repetitions int,
+    Foreign key(workoutProgram_id) references WorkoutProgram(workoutProgram_id) on delete cascade,
+    Foreign key(excercise_id) references Excercise(excercise_id) on delete cascade,
+    unique(workoutProgram_id, excercise_id, set_number)
 );

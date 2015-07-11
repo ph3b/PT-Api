@@ -36,7 +36,7 @@ module.exports = function(request, response){
                 .then(function(result, userWasNotAddedToDatabase){
                     /* istanbul ignore if */
                     if(userWasNotAddedToDatabase){
-                        response.send({message: "Could not add user to database"});
+                        response.send({message: "Could not add user to database."});
                     }
                     else {
                        response.send({message: "Added.", trainer_id: result[0]});
